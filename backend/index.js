@@ -23,4 +23,8 @@ app.use("/user", userRouter);
 
 connectDB();
 
+app.listen(PORT, () => {
+  console.log(`Server listening on 5000 http://localhost:${PORT}`);
+});
+
 export default app;
