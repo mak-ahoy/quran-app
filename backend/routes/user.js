@@ -1,5 +1,4 @@
 import express from "express"
-import { app } from "../server.js";
 import { loginUser, registerUser } from "../controllers/user.js";
 import { getSurahVerses, getSurahs } from "../controllers/content.js";
 

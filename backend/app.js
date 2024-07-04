@@ -3,7 +3,6 @@ import cors from "cors"
 import { connectDB } from "./db/connect_db.js";
 import { userRouter } from "./routes/user.js";
 import { config } from "dotenv";
-import bodyParser from "body-parser";
 
 let PORT = process.env.PORT || 8000
 
