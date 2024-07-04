@@ -23,6 +23,4 @@ app.use("/user", userRouter);
 
 connectDB();
 
-app.listen(PORT,()=>{
-    console.log(`Listening on port: ${PORT}`)
-})
+export default app;
