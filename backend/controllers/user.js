@@ -3,8 +3,11 @@ import { User } from "../models/User.js";
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken'
 import connection from "../db/connect_mysql.js";
+import bcrypt from 'bcrypt'
 
-const secretKey = "1234567890"
+const saltRounds = 10; 
+
+
 
 
 export const registerUser = async (req, res, next) => {
@@ -12,15 +15,20 @@ export const registerUser = async (req, res, next) => {
         const { email, username, password } = req.body;
 
         
+        
         if (!email || !username || !password) {
             return res.status(400).json({
                 message: "please provide all fields"
             });
         }
+
+        const encrypted_pass = await bcrypt.hash(password, saltRounds);
+
+        // console.log(encrypted_pass);
         
         const query = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
         
-        connection.query(query, [email, username, password], (err, results) => {
+        connection.query(query, [email, username, encrypted_pass], (err, results) => {
             if (err) {
                 return res.status(500).json({
                     message: "Error registering user",
@@ -74,13 +82,13 @@ export const loginUser = async (req, res, next) => {
             console.log(results)
             console.log(user_info)
 
-            if (user_info.password !== password) {
+            if (!bcrypt.compare(password, user_info.password)) {
                 return res.status(403).json({
                     message: "Invalid password"
                 });
             }
 
-            let token = jwt.sign({ email: user_info.email, username: user_info.username }, secretKey, { expiresIn: '1h' });
+            let token = jwt.sign({ email: user_info.email, username: user_info.username }, process.env.secretKey, { expiresIn: '1h' });
             
 
             return res.status(200).json({
@@ -150,7 +158,9 @@ export const updateUser = async (req, res, next) => {
         const query = 'UPDATE users SET email= ? , username = ?, password = ? WHERE id = ?';
         // console.log("api hit")
 
-        connection.query(query, [email, username, password, id], (err, results) => {
+        const encrypted = await bcrypt.hash(password, saltRounds)
+
+        connection.query(query, [email, username, encrypted, id], (err, results) => {
             if (err) {
                 return res.status(500).json({
                     message: "Error updating user info",
@@ -195,7 +205,7 @@ export const deleteUser = async (req, res, next) => {
                 });
             }
 
-            console.log(results)
+            // console.log(results)
 
             // if (results.length === 0) {
             //     return res.status(400).json({
