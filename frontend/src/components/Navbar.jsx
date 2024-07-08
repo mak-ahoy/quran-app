@@ -10,8 +10,8 @@ function NavBar(props) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
+            {props.user? null :  <Nav.Link href="/users">Users</Nav.Link>}
             <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link href="/" onClick={()=>{localStorage.clear()}}>Logout</Nav.Link>

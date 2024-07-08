@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import SpecificCard from './pages/SpecificCard';
 import MissingPage from './pages/MissingPage';
 import ProtectedRoute from './components/ProtectedRoute'; // import the ProtectedRoute component
+import Users from './pages/Users';
+import UserDetails from './pages/UserDetails';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route index element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="home" element={<ProtectedRoute element={Home} />} />
+          <Route path="users" element={<ProtectedRoute element={Users} />} />
+          <Route path="users/:id" element={<ProtectedRoute element={UserDetails} />} />
           <Route path="home/surah" element={<ProtectedRoute element={SpecificCard} />} />
         </Route>
         <Route path="*" element={<MissingPage />} />
